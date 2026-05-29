@@ -1,0 +1,65 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Data & uploads
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Models & embeddings cache (can be large)
+.cache/
+*.bin
+*.pt
+*.pth
+*.onnx
+
+# Chainlit
+.chainlit/
+chainlit_data/
+
+# Milvus local data
+volumes/
+milvus_data/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test & coverage
+.pytest_cache/
+.coverage
+htmlcov/
