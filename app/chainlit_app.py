@@ -81,13 +81,13 @@ async def on_chat_start() -> None:
             name="ingest_action",
             label="📂 Ingérer des documents",
             description="Charger et indexer un PDF ou une image",
-            value="ingest",
+            payload={"action": "ingest"},
         ),
         cl.Action(
             name="status_action",
             label="ℹ️ Statut du système",
             description="Vérifier la connexion Milvus et Redis",
-            value="status",
+            payload={"action": "status"},
         ),
     ]
     await cl.Message(content="Choisissez une action :", actions=actions).send()
