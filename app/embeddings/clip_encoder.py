@@ -56,7 +56,8 @@ class CLIPEncoder:
             image = Image.open(image).convert("RGB")
         inputs = self.processor(images=image, return_tensors="pt").to(self.device)
         with torch.no_grad():
-            features = self.model.get_image_features(**inputs)
+            output = self.model.get_image_features(**inputs)
+            features = output.image_embeds if hasattr(output, "image_embeds") else output
             features = features / features.norm(dim=-1, keepdim=True)
         vec = features.cpu().numpy()[0].astype(np.float32)
         return self._pad_to_target(vec)
@@ -68,7 +69,8 @@ class CLIPEncoder:
             self.device
         )
         with torch.no_grad():
-            features = self.model.get_text_features(**inputs)
+            output = self.model.get_text_features(**inputs)
+            features = output.text_embeds if hasattr(output, "text_embeds") else output
             features = features / features.norm(dim=-1, keepdim=True)
         vec = features.cpu().numpy()[0].astype(np.float32)
         return self._pad_to_target(vec)

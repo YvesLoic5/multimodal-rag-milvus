@@ -161,7 +161,8 @@ def ingest_directory(directory: str | Path) -> dict[str, int]:
             totals["text_chunks"] += result["text_chunks"]
             totals["image_chunks"] += result["image_chunks"]
         except Exception as exc:
-            logger.error("Failed to ingest file", path=str(f), error=str(exc))
+            import traceback
+            logger.error("Failed to ingest file", path=str(f), error=str(exc), trace=traceback.format_exc())
 
     logger.info("Directory ingestion complete", **totals)
     return totals

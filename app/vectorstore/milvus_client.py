@@ -134,11 +134,13 @@ class MilvusVectorStore:
 
         rows = []
         for r in records:
+            dense = r["dense_vector"]
+            dense = dense.tolist() if hasattr(dense, "tolist") else list(dense)
             rows.append({
                 "doc_id": r["doc_id"],
                 "modality": r["modality"],
                 "content_text": r["content_text"][:65535],
-                "dense_vector": r["dense_vector"].tolist(),
+                "dense_vector": dense,
                 "sparse_vector": r["sparse_vector"],
                 "metadata": r["metadata"],
             })
