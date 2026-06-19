@@ -11,8 +11,7 @@ from __future__ import annotations
 
 from typing import Any, AsyncGenerator
 
-from langchain.schema import HumanMessage, SystemMessage, AIMessage
-from langchain_core.messages import BaseMessage
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 
 from app.utils.config import get_settings
 from app.utils.logger import get_logger
