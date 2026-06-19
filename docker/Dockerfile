@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir poetry==1.8.2
 
 COPY pyproject.toml poetry.lock* ./
 
+# CPU-only PyTorch (~200Mo vs ~2.5Go avec CUDA)
+RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi --no-root
 
