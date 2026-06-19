@@ -94,7 +94,7 @@ class MilvusVectorStore:
             logger.info("Collection already exists", collection=name)
 
         self._collection = Collection(name)
-        if self._collection.get_load_state().name != LoadState.Loaded.name:
+        if utility.load_state(name) != LoadState.Loaded:
             self._collection.load()
 
     @staticmethod

@@ -55,6 +55,10 @@ milvus_data/
 *.swp
 *.swo
 
+# Kubernetes & secrets
+*.kubeconfig
+kubeconfig*.yaml
+
 # OS
 .DS_Store
 Thumbs.db

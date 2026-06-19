@@ -1,0 +1,36 @@
+# Interface & Orchestration
+chainlit>=1.2.0
+langchain>=0.2.0
+langchain-openai>=0.1.0
+langchain-community>=0.2.0
+
+# Embeddings & Models
+transformers>=4.40.0
+torch>=2.2.0
+torchvision>=0.17.0
+FlagEmbedding>=1.2.0
+sentence-transformers>=3.0.0
+
+# Vector Store
+pymilvus>=2.4.0
+
+# Cache & Performance
+redis>=5.0.0
+redisvl>=0.2.0
+
+# Document Ingestion
+PyMuPDF>=1.24.0
+Pillow>=10.0.0
+unstructured[pdf]>=0.14.0
+
+# Quality & Monitoring
+ragas>=0.1.0
+loguru>=0.7.0
+pydantic-settings>=2.0.0
+
+# Utilities
+tenacity>=8.2.0
+httpx>=0.27.0
+python-dotenv>=1.0.0
+numpy>=1.26.0
+tqdm>=4.66.0
