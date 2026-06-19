@@ -140,11 +140,7 @@ async def on_message(message: cl.Message) -> None:
         ).send()
         sources_text = cached.get("sources_text", "")
         if sources_text:
-            await cl.Text(
-                name="Sources",
-                content=sources_text,
-                display="side",
-            ).send()
+            await cl.Message(content=sources_text).send()
         _append_history("user", question)
         _append_history("assistant", cached["answer"])
         return
@@ -187,11 +183,7 @@ async def on_message(message: cl.Message) -> None:
 
         # ── Show sources ──────────────────────────────────────────────────────
         sources_text = _format_sources(hits)
-        await cl.Text(
-            name="📚 Sources",
-            content=sources_text,
-            display="side",
-        ).send()
+        await cl.Message(content=sources_text).send()
 
         # ── Cache the result ──────────────────────────────────────────────────
         cache.set(question, {"answer": full_answer, "sources_text": sources_text})
