@@ -132,23 +132,18 @@ class MilvusVectorStore:
         if not records:
             return []
 
-        data: dict[str, list[Any]] = {
-            "doc_id": [],
-            "modality": [],
-            "content_text": [],
-            "dense_vector": [],
-            "sparse_vector": [],
-            "metadata": [],
-        }
+        rows = []
         for r in records:
-            data["doc_id"].append(r["doc_id"])
-            data["modality"].append(r["modality"])
-            data["content_text"].append(r["content_text"][:65535])
-            data["dense_vector"].append(r["dense_vector"].tolist())
-            data["sparse_vector"].append(r["sparse_vector"])
-            data["metadata"].append(r["metadata"])
+            rows.append({
+                "doc_id": r["doc_id"],
+                "modality": r["modality"],
+                "content_text": r["content_text"][:65535],
+                "dense_vector": r["dense_vector"].tolist(),
+                "sparse_vector": r["sparse_vector"],
+                "metadata": r["metadata"],
+            })
 
-        result = self.collection.insert(data)
+        result = self.collection.insert(rows)
         self.collection.flush()
         ids: list[int] = result.primary_keys
         logger.info("Inserted records", count=len(ids))
