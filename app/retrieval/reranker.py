@@ -71,6 +71,7 @@ class CrossEncoderReranker:
             h["rerank_score"] = h.get("score", 0.0)
 
         merged = text_hits + image_hits
+        merged.sort(key=lambda h: h["rerank_score"], reverse=True)
         result = merged[:top_k]
 
         logger.info(

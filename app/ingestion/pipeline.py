@@ -98,6 +98,52 @@ def _ingest_text_chunks(chunks: list[TextChunk]) -> int:
     return len(records)
 
 
+def _describe_image(image: "Image.Image", source: str, page: str) -> str:
+    """Generate a description of the image using GPT-4o Vision or fallback."""
+    import base64
+    import io
+
+    settings = get_settings()
+    fallback = f"Image from page {page} of {source}"
+
+    if not settings.use_openai:
+        return fallback
+
+    try:
+        import httpx
+
+        buf = io.BytesIO()
+        image.save(buf, format="PNG")
+        b64 = base64.b64encode(buf.getvalue()).decode()
+
+        resp = httpx.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={"Authorization": f"Bearer {settings.openai_api_key}"},
+            json={
+                "model": "gpt-4o",
+                "max_tokens": 300,
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": "Décris cette image en détail en français. Mentionne tous les éléments visibles, le texte, les diagrammes, les schémas. Sois précis et factuel."},
+                            {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}},
+                        ],
+                    }
+                ],
+            },
+            timeout=60,
+        )
+        resp.raise_for_status()
+        description = resp.json()["choices"][0]["message"]["content"]
+        caption = f"[Image: {source}, page {page}] {description}"
+        logger.info("Image described by GPT-4o Vision", source=source, page=page, caption_len=len(caption))
+        return caption
+    except Exception as exc:
+        logger.warning("Image captioning failed, using fallback", error=str(exc))
+        return fallback
+
+
 def _ingest_image_chunks(chunks: list[ImageChunk]) -> int:
     if not chunks:
         return 0
@@ -108,8 +154,11 @@ def _ingest_image_chunks(chunks: list[ImageChunk]) -> int:
     records: list[dict[str, Any]] = []
     for chunk in tqdm(chunks, desc="Encoding images"):
         dense_vec = clip.encode_image(chunk.image)
-        # Generate a caption as placeholder for sparse encoding
-        caption = f"Image from page {chunk.metadata.get('page', '?')} of {chunk.metadata.get('source', 'unknown')}"
+        caption = _describe_image(
+            chunk.image,
+            chunk.metadata.get("source", "unknown"),
+            str(chunk.metadata.get("page", "?")),
+        )
         sparse_emb = bge.encode_single(caption)["sparse"]
 
         records.append(

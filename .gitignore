@@ -58,6 +58,7 @@ milvus_data/
 # Kubernetes & secrets
 *.kubeconfig
 kubeconfig*.yaml
+deployment-*.yaml
 
 # OS
 .DS_Store
